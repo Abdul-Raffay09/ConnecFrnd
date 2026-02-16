@@ -1,0 +1,1443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ConnecFriend - Social Media</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <style>
+        body {
+            background: #f0f2f5;
+            min-height: 100vh;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+        .login-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .login-card {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            padding: 50px;
+            max-width: 450px;
+            width: 100%;
+            animation: slideIn 0.5s ease;
+        }
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .login-card h2 {
+            font-weight: 700;
+            color: #667eea;
+        }
+        .app-container {
+            background: #f0f2f5;
+            min-height: 100vh;
+        }
+        .navbar-custom {
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .profile-pic {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid white;
+        }
+        .profile-pic-large {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 5px solid white;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+        }
+        .profile-cover {
+            height: 250px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 15px 15px 0 0;
+            position: relative;
+        }
+        .profile-pic-container {
+            position: relative;
+            margin-top: -75px;
+            text-align: center;
+        }
+        .post-card {
+            background: white;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .post-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+        }
+        .info-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        .info-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #f0f2f5;
+        }
+        .info-item:last-child {
+            border-bottom: none;
+        }
+        .info-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            margin-right: 15px;
+            font-size: 18px;
+        }
+        .friend-item {
+            padding: 15px;
+            border-bottom: 1px solid #f0f2f5;
+            transition: background 0.3s;
+            border-radius: 10px;
+            margin-bottom: 10px;
+        }
+        .friend-item:hover {
+            background: #f8f9fa;
+        }
+        .rating-icon {
+            cursor: pointer;
+            font-size: 28px;
+            margin: 0 5px;
+            transition: transform 0.2s;
+            filter: grayscale(100%);
+            opacity: 0.5;
+        }
+        .rating-icon:hover {
+            transform: scale(1.2);
+            filter: grayscale(0%);
+            opacity: 1;
+        }
+        .rating-icon.rating-stupid,
+        .rating-icon.rating-cool,
+        .rating-icon.rating-trustworthy {
+            filter: grayscale(0%);
+            opacity: 1;
+        }
+        .rating-stupid { color: #dc3545; }
+        .rating-cool { color: #ffc107; }
+        .rating-trustworthy { color: #28a745; }
+        .message-bubble {
+            max-width: 70%;
+            padding: 12px 18px;
+            border-radius: 20px;
+            margin-bottom: 10px;
+        }
+        .message-sent {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            margin-left: auto;
+        }
+        .message-received {
+            background: #e9ecef;
+            color: #333;
+        }
+        .post-image {
+            width: 100%;
+            max-height: 500px;
+            object-fit: cover;
+            border-radius: 12px;
+            margin: 15px 0;
+        }
+        .time-ago {
+            color: #65676b;
+            font-size: 0.85rem;
+        }
+        .nav-pills .nav-link {
+            border-radius: 12px;
+            padding: 10px 20px;
+            color: #65676b;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        .nav-pills .nav-link:hover {
+            background: #e9ecef;
+        }
+        .nav-pills .nav-link.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            border-radius: 10px;
+            padding: 10px 25px;
+            font-weight: 500;
+            transition: transform 0.2s;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        .stats-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+        .stats-number {
+            font-size: 2rem;
+            font-weight: 700;
+        }
+        .stats-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+        .badge {
+            padding: 5px 10px;
+            border-radius: 8px;
+            font-weight: 500;
+        }
+        .hide { display: none; }
+        .section-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #1c1e21;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .delete-post-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(220, 53, 69, 0.9);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 35px;
+            height: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            opacity: 0.7;
+        }
+        .delete-post-btn:hover {
+            opacity: 1;
+            transform: scale(1.1);
+            background: rgba(220, 53, 69, 1);
+        }
+        .post-header-container {
+            position: relative;
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Page -->
+    <div id="loginPage" class="login-container">
+        <div class="login-card">
+            <h2 class="text-center mb-4">
+                <i class="bi bi-people-fill text-primary"></i>
+                ConnecFriend
+            </h2>
+            <p class="text-center text-muted mb-4">Connect with friends and share your moments</p>
+            <div id="loginError" class="alert alert-danger hide"></div>
+            <form id="loginForm">
+                <div class="mb-3">
+                    <label class="form-label">Username</label>
+                    <input type="text" class="form-control" id="username" required>
+                    <small class="text-muted">Try: raffay, bhatti, fullstack</small>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Password</label>
+                    <input type="password" class="form-control" id="password" required>
+                    <small class="text-muted">Password: password123</small>
+                </div>
+                <button type="submit" class="btn btn-primary w-100">Sign In</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Main App -->
+    <div id="mainApp" class="app-container hide">
+        <!-- Navigation -->
+        <nav class="navbar navbar-expand-lg navbar-dark navbar-custom">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#"><i class="bi bi-people-fill"></i> ConnecFriend</a>
+                <div class="d-flex align-items-center">
+                    <img id="navProfilePic" class="profile-pic me-2" src="" alt="Profile">
+                    <span class="text-white me-3" id="navUsername"></span>
+                    <button class="btn btn-light btn-sm" onclick="logout()">Logout</button>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Tab Navigation -->
+        <div class="container mt-3">
+            <ul class="nav nav-pills mb-3" id="mainTabs">
+                <li class="nav-item">
+                    <a class="nav-link active" href="#" onclick="showTab('home', event); return false;">
+                        <i class="bi bi-house-fill"></i> Home
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" onclick="showTab('profile', event); return false;">
+                        <i class="bi bi-person-fill"></i> Profile
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" onclick="showTab('friendRequests', event); return false;">
+                        <i class="bi bi-person-check-fill"></i> Friend Requests
+                        <span id="requestBadge" class="badge bg-danger ms-1 hide">0</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" onclick="showTab('messages', event); return false;">
+                        <i class="bi bi-chat-fill"></i> Messages
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" onclick="showTab('findFriends', event); return false;">
+                        <i class="bi bi-person-plus-fill"></i> Find Friends
+                    </a>
+                </li>
+            </ul>
+
+            <!-- Home Tab -->
+            <div id="homeTab" class="tab-content">
+                <div class="row">
+                    <div class="col-lg-8">
+                        <!-- Create Post -->
+                        <div class="post-card p-3 mb-3">
+                            <h5>Share something...</h5>
+                            <textarea class="form-control mb-2" id="postContent" rows="3" placeholder="What's on your mind?"></textarea>
+                            <div class="mb-2">
+                                <label class="form-label">Image URL (optional):</label>
+                                <input type="text" class="form-control mb-2" id="postImage" placeholder="https://example.com/image.jpg">
+                            </div>
+                            <div class="mb-2">
+                                <label class="form-label">Share with:</label>
+                                <select class="form-select mb-2" id="shareWith">
+                                    <option value="all">All Friends</option>
+                                    <option value="select">Select Friends</option>
+                                </select>
+                                <div id="friendSelector" class="hide mb-2">
+                                    <div id="friendCheckboxes"></div>
+                                </div>
+                            </div>
+                            <button class="btn btn-primary" onclick="createPost()">
+                                <i class="bi bi-send-fill"></i> Post
+                            </button>
+                        </div>
+
+                        <!-- News Feed -->
+                        <div id="newsFeed"></div>
+                    </div>
+
+                    <div class="col-lg-4">
+                        <!-- Friends Online -->
+                        <div class="post-card p-3">
+                            <h5 class="mb-3">
+                                <i class="bi bi-circle-fill text-success" style="font-size: 0.6rem;"></i>
+                                Friends Activity
+                            </h5>
+                            <div id="friendsOnline"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Profile Tab -->
+            <div id="profileTab" class="tab-content hide">
+                <div class="row">
+                    <div class="col-lg-4">
+                        <!-- Profile Card -->
+                        <div class="post-card">
+                            <div class="profile-cover"></div>
+                            <div class="profile-pic-container">
+                                <img id="profilePicLarge" class="profile-pic-large" src="" alt="Profile">
+                            </div>
+                            <div class="p-4 text-center">
+                                <h3 id="profileName" class="mb-1" style="font-weight: 700;"></h3>
+                                <p class="text-muted mb-3" id="profileBio"></p>
+                            </div>
+                        </div>
+
+                        <!-- Stats Cards -->
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="stats-card">
+                                    <div class="stats-number" id="statsPostCount">0</div>
+                                    <div class="stats-label">Posts</div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="stats-card">
+                                    <div class="stats-number" id="statsFriendCount">0</div>
+                                    <div class="stats-label">Friends</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- About Section -->
+                        <div class="info-card">
+                            <h5 class="section-title">
+                                <i class="bi bi-info-circle-fill"></i>
+                                About
+                            </h5>
+                            <div id="aboutInfo"></div>
+                        </div>
+
+                        <!-- Friends List -->
+                        <div class="post-card p-4 mb-3">
+                            <h5 class="section-title">
+                                <i class="bi bi-people-fill"></i>
+                                Friends (<span id="friendCount">0</span>)
+                            </h5>
+                            <div id="friendsList"></div>
+                        </div>
+
+                        <!-- Ignored Users -->
+                        <div class="post-card p-4">
+                            <h5 class="section-title text-danger">
+                                <i class="bi bi-person-x-fill"></i>
+                                Ignored Users
+                            </h5>
+                            <p class="text-muted small">Users you've ignored won't be able to send you friend requests</p>
+                            <div id="ignoredList"></div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-8">
+                        <!-- User Posts -->
+                        <div class="post-card p-4 mb-3">
+                            <h5 class="section-title">
+                                <i class="bi bi-file-text-fill"></i>
+                                My Posts
+                            </h5>
+                            <div id="userPosts"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Friend Requests Tab -->
+            <div id="friendRequestsTab" class="tab-content hide">
+                <div class="row">
+                    <div class="col-lg-8">
+                        <div class="post-card p-4">
+                            <h4 class="mb-4">
+                                <i class="bi bi-person-check-fill"></i> Friend Requests
+                            </h4>
+                            <div id="pendingRequests"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Messages Tab -->
+            <div id="messagesTab" class="tab-content hide">
+                <div class="row">
+                    <div class="col-lg-4">
+                        <div class="post-card p-3">
+                            <h5>Conversations</h5>
+                            <div id="conversationsList"></div>
+                        </div>
+                    </div>
+                    <div class="col-lg-8">
+                        <div class="post-card p-3" id="messageArea">
+                            <p class="text-center text-muted">Select a conversation to start messaging</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Find Friends Tab -->
+            <div id="findFriendsTab" class="tab-content hide">
+                <div class="post-card p-4">
+                    <h5>Find Friends</h5>
+                    <div id="allUsersList"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Mock Database
+        const USERS = {
+            'raffay': {
+                id: 'raffay',
+                password: 'password123',
+                name: 'Raffay Ahmed',
+                email: 'raffay@gmail.com',
+                bio: 'Software developer and tech enthusiast 💻',
+                profilePic: 'images/raffay.jpg',
+                location: 'Rawalpindi, Pakistan',
+                website: 'www.raffay.dev',
+                phone: '+92 300 1234567',
+                dateOfBirth: 'January 15, 2002',
+                gender: 'Male',
+                education: 'BS Computer Science - AIR University',
+                work: 'Full Stack Developer at Tech Solutions',
+                hobbies: 'Coding, Gaming, Reading Tech Blogs',
+                relationshipStatus: 'Single',
+                joinDate: 'November 2023',
+                friends: [],
+                ignoredUsers: [],
+                lastLogin: null,
+                friendRatings: {}
+            },
+            'bhatti': {
+                id: 'bhatti',
+                password: 'password123',
+                name: 'Bhatti Khan',
+                email: 'bhatti@example.com',
+                bio: 'Digital marketer | Entrepreneur 🚀',
+                profilePic: 'images/bhatti.jpg',
+                location: 'Islamabad, Pakistan',
+                website: 'www.bhattikhan.com',
+                phone: '+92 301 7654321',
+                dateOfBirth: 'March 22, 1995',
+                gender: 'Male',
+                education: 'MBA Marketing - NUST',
+                work: 'Marketing Manager at Digital Solutions',
+                hobbies: 'Traveling, Photography, Business Books',
+                relationshipStatus: 'Married',
+                joinDate: 'October 2023',
+                friends: [],
+                ignoredUsers: [],
+                lastLogin: null,
+                friendRatings: {}
+            },
+            'fullstack': {
+                id: 'fullstack',
+                password: 'password123',
+                name: 'FullStack Developer',
+                email: 'fullstack@example.com',
+                bio: 'Full Stack Developer | MERN Stack Expert 🔥',
+                profilePic: 'images/fullstack.png',
+                location: 'Lahore, Pakistan',
+                website: 'www.fullstackdev.io',
+                phone: '+92 302 9876543',
+                dateOfBirth: 'July 10, 1997',
+                gender: 'Male',
+                education: 'BS Software Engineering - UET',
+                work: 'Senior Developer at StartupHub',
+                hobbies: 'Open Source Projects, Mentoring, Coffee',
+                relationshipStatus: 'In a relationship',
+                joinDate: 'September 2023',
+                friends: [],
+                ignoredUsers: [],
+                lastLogin: null,
+                friendRatings: {}
+            },
+            'ali': {
+                id: 'ali',
+                password: 'password123',
+                name: 'Ali Hassan',
+                email: 'ali@example.com',
+                bio: 'UI/UX Designer | Creative Mind 🎨',
+                profilePic: 'images/ali.jpg',
+                location: 'Karachi, Pakistan',
+                website: 'www.alihassan.design',
+                phone: '+92 303 5554321',
+                dateOfBirth: 'May 5, 1996',
+                gender: 'Male',
+                education: 'BS Graphic Design - IVS',
+                work: 'Lead Designer at Creative Agency',
+                hobbies: 'Drawing, Music, Design Inspiration',
+                relationshipStatus: 'Single',
+                joinDate: 'August 2023',
+                friends: [],
+                ignoredUsers: [],
+                lastLogin: null,
+                friendRatings: {}
+            }
+        };
+
+        let POSTS = [
+            {
+                id: 1,
+                userId: 'bhatti',
+                content: 'Just launched a new marketing campaign! Feeling accomplished 🎉',
+                imageUrl: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=600',
+                timestamp: new Date(Date.now() - 60000), // 1 minute ago
+                likes: ['raffay'],
+                dislikes: [],
+                sharedWith: 'all'
+            },
+            {
+                id: 2,
+                userId: 'fullstack',
+                content: 'Working on a new MERN stack project! Code never sleeps 💪',
+                imageUrl: '',
+                timestamp: new Date(Date.now() - 1800000), // 30 minutes ago
+                likes: ['raffay'],
+                dislikes: [],
+                sharedWith: 'all'
+            },
+            {
+                id: 3,
+                userId: 'ali',
+                content: 'New UI design coming soon. Stay tuned! 🎨',
+                imageUrl: 'https://images.unsplash.com/photo-1561070791-2526d30994b5?w=600',
+                timestamp: new Date(Date.now() - 7200000), // 2 hours ago
+                likes: ['bhatti'],
+                dislikes: [],
+                sharedWith: 'all'
+            }
+        ];
+
+        let MESSAGES = {};
+        let FRIEND_REQUESTS = [];
+
+        let currentUser = null;
+        let selectedConversation = null;
+
+        // Login functionality
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            if (USERS[username] && USERS[username].password === password) {
+                currentUser = username;
+                USERS[username].lastLogin = new Date();
+                document.getElementById('loginPage').classList.add('hide');
+                document.getElementById('mainApp').classList.remove('hide');
+                initializeApp();
+            } else {
+                const errorDiv = document.getElementById('loginError');
+                errorDiv.textContent = 'Invalid username or password';
+                errorDiv.classList.remove('hide');
+            }
+        });
+
+        function logout() {
+            currentUser = null;
+            document.getElementById('loginPage').classList.remove('hide');
+            document.getElementById('mainApp').classList.add('hide');
+            document.getElementById('loginForm').reset();
+        }
+
+        function initializeApp() {
+            const user = USERS[currentUser];
+            document.getElementById('navUsername').textContent = user.name;
+            document.getElementById('navProfilePic').src = user.profilePic;
+            
+            showTab('home');
+            updateProfile();
+            renderNewsFeed();
+            renderFriendsOnline();
+            renderConversations();
+            renderAllUsers();
+            updateRequestBadge();
+        }
+
+        function showTab(tabName, event) {
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.add('hide'));
+            document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
+            
+            document.getElementById(tabName + 'Tab').classList.remove('hide');
+            if (event && event.target) {
+                event.target.classList.add('active');
+            } else {
+                // Find and activate the correct tab link
+                const links = document.querySelectorAll('.nav-link');
+                links.forEach((link, index) => {
+                    if ((tabName === 'home' && index === 0) ||
+                        (tabName === 'profile' && index === 1) ||
+                        (tabName === 'messages' && index === 2) ||
+                        (tabName === 'findFriends' && index === 3)) {
+                        link.classList.add('active');
+                    }
+                });
+            }
+
+            if (tabName === 'home') {
+                renderNewsFeed();
+                renderFriendsOnline();
+            } else if (tabName === 'profile') {
+                updateProfile();
+            } else if (tabName === 'friendRequests') {
+                renderFriendRequests();
+            } else if (tabName === 'messages') {
+                renderConversations();
+            } else if (tabName === 'findFriends') {
+                renderAllUsers();
+            }
+        }
+
+        function updateProfile() {
+            const user = USERS[currentUser];
+            document.getElementById('profilePicLarge').src = user.profilePic;
+            document.getElementById('profileName').textContent = user.name;
+            document.getElementById('profileBio').textContent = user.bio;
+            
+            // Update stats
+            const userPosts = POSTS.filter(post => post.userId === currentUser);
+            document.getElementById('statsPostCount').textContent = userPosts.length;
+            document.getElementById('statsFriendCount').textContent = user.friends.length;
+            document.getElementById('friendCount').textContent = user.friends.length;
+
+            // Render About Info
+            const aboutInfo = document.getElementById('aboutInfo');
+            aboutInfo.innerHTML = `
+                <div class="info-item">
+                    <div class="info-icon"><i class="bi bi-envelope-fill"></i></div>
+                    <div>
+                        <small class="text-muted d-block">Email</small>
+                        <strong>${user.email}</strong>
+                    </div>
+                </div>
+                <div class="info-item">
+                    <div class="info-icon"><i class="bi bi-geo-alt-fill"></i></div>
+                    <div>
+                        <small class="text-muted d-block">Location</small>
+                        <strong>${user.location}</strong>
+                    </div>
+                </div>
+                <div class="info-item">
+                    <div class="info-icon"><i class="bi bi-telephone-fill"></i></div>
+                    <div>
+                        <small class="text-muted d-block">Phone</small>
+                        <strong>${user.phone}</strong>
+                    </div>
+                </div>
+                <div class="info-item">
+                    <div class="info-icon"><i class="bi bi-globe"></i></div>
+                    <div>
+                        <small class="text-muted d-block">Website</small>
+                        <strong>${user.website}</strong>
+                    </div>
+                </div>
+                <div class="info-item">
+                    <div class="info-icon"><i class="bi bi-calendar-fill"></i></div>
+                    <div>
+                        <small class="text-muted d-block">Date of Birth</small>
+                        <strong>${user.dateOfBirth}</strong>
+                    </div>
+                </div>
+                <div class="info-item">
+                    <div class="info-icon"><i class="bi bi-gender-ambiguous"></i></div>
+                    <div>
+                        <small class="text-muted d-block">Gender</small>
+                        <strong>${user.gender}</strong>
+                    </div>
+                </div>
+                <div class="info-item">
+                    <div class="info-icon"><i class="bi bi-heart-fill"></i></div>
+                    <div>
+                        <small class="text-muted d-block">Relationship</small>
+                        <strong>${user.relationshipStatus}</strong>
+                    </div>
+                </div>
+                <div class="info-item">
+                    <div class="info-icon"><i class="bi bi-briefcase-fill"></i></div>
+                    <div>
+                        <small class="text-muted d-block">Work</small>
+                        <strong>${user.work}</strong>
+                    </div>
+                </div>
+                <div class="info-item">
+                    <div class="info-icon"><i class="bi bi-book-fill"></i></div>
+                    <div>
+                        <small class="text-muted d-block">Education</small>
+                        <strong>${user.education}</strong>
+                    </div>
+                </div>
+                <div class="info-item">
+                    <div class="info-icon"><i class="bi bi-controller"></i></div>
+                    <div>
+                        <small class="text-muted d-block">Hobbies</small>
+                        <strong>${user.hobbies}</strong>
+                    </div>
+                </div>
+                <div class="info-item">
+                    <div class="info-icon"><i class="bi bi-clock-fill"></i></div>
+                    <div>
+                        <small class="text-muted d-block">Joined</small>
+                        <strong>${user.joinDate}</strong>
+                    </div>
+                </div>
+            `;
+
+            const friendsList = document.getElementById('friendsList');
+            friendsList.innerHTML = '';
+
+            if (user.friends.length === 0) {
+                friendsList.innerHTML = '<p class="text-muted text-center">No friends yet. Start adding friends!</p>';
+            } else {
+                user.friends.forEach(friendId => {
+                    const friend = USERS[friendId];
+                    const rating = user.friendRatings[friendId] || 0;
+                    
+                    friendsList.innerHTML += `
+                        <div class="friend-item d-flex align-items-center">
+                            <img src="${friend.profilePic}" class="profile-pic me-3" alt="${friend.name}">
+                            <div class="flex-grow-1">
+                                <h6 class="mb-0">${friend.name}</h6>
+                                <small class="text-muted">${friend.bio}</small>
+                            </div>
+                            <div class="d-flex align-items-center gap-2">
+                                <span class="rating-icon ${rating === 1 ? 'rating-stupid' : ''}" 
+                                      onclick="rateFriend('${friendId}', 1)" title="Stupid">
+                                    <i class="bi bi-emoji-frown${rating === 1 ? '-fill' : ''}"></i>
+                                </span>
+                                <span class="rating-icon ${rating === 2 ? 'rating-cool' : ''}" 
+                                      onclick="rateFriend('${friendId}', 2)" title="Cool">
+                                    <i class="bi bi-emoji-smile${rating === 2 ? '-fill' : ''}"></i>
+                                </span>
+                                <span class="rating-icon ${rating === 3 ? 'rating-trustworthy' : ''}" 
+                                      onclick="rateFriend('${friendId}', 3)" title="Trustworthy">
+                                    <i class="bi bi-emoji-heart-eyes${rating === 3 ? '-fill' : ''}"></i>
+                                </span>
+                                <button class="btn btn-sm btn-danger ms-2" onclick="unfriendUser('${friendId}')" title="Unfriend">
+                                    <i class="bi bi-person-x"></i>
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                });
+            }
+
+            // Render ignored users list
+            const ignoredList = document.getElementById('ignoredList');
+            ignoredList.innerHTML = '';
+
+            if (user.ignoredUsers.length === 0) {
+                ignoredList.innerHTML = '<p class="text-muted text-center">No ignored users</p>';
+            } else {
+                user.ignoredUsers.forEach(ignoredId => {
+                    const ignoredUser = USERS[ignoredId];
+                    ignoredList.innerHTML += `
+                        <div class="friend-item d-flex align-items-center">
+                            <img src="${ignoredUser.profilePic}" class="profile-pic me-3" alt="${ignoredUser.name}">
+                            <div class="flex-grow-1">
+                                <h6 class="mb-0">${ignoredUser.name}</h6>
+                                <small class="text-muted">${ignoredUser.bio}</small>
+                            </div>
+                            <button class="btn btn-sm btn-success" onclick="unignoreUser('${ignoredId}')">
+                                <i class="bi bi-arrow-counterclockwise"></i> Unignore
+                            </button>
+                        </div>
+                    `;
+                });
+            }
+            
+            // Render user posts on profile
+            renderUserPosts();
+        }
+
+        function renderUserPosts() {
+            const userPostsDiv = document.getElementById('userPosts');
+            const userPosts = POSTS.filter(post => post.userId === currentUser);
+            
+            if (userPosts.length === 0) {
+                userPostsDiv.innerHTML = '<p class="text-muted text-center">No posts yet. Share something on your Home page!</p>';
+                return;
+            }
+
+            userPostsDiv.innerHTML = '';
+            userPosts.forEach(post => {
+                const author = USERS[post.userId];
+                const timeAgo = getTimeAgo(post.timestamp);
+                const isLiked = post.likes.includes(currentUser);
+                const isDisliked = post.dislikes.includes(currentUser);
+
+                userPostsDiv.innerHTML += `
+                    <div class="post-card p-3 mb-3">
+                        <div class="post-header-container">
+                            <button class="delete-post-btn" onclick="deletePost(${post.id})" title="Delete Post">
+                                <i class="bi bi-trash-fill"></i>
+                            </button>
+                            <div class="d-flex align-items-center mb-3">
+                                <img src="${author.profilePic}" class="profile-pic me-2" alt="${author.name}">
+                                <div>
+                                    <h6 class="mb-0">${author.name}</h6>
+                                    <small class="time-ago">${timeAgo}</small>
+                                </div>
+                            </div>
+                        </div>
+                        <p>${post.content}</p>
+                        ${post.imageUrl ? `<img src="${post.imageUrl}" class="post-image" alt="Post image">` : ''}
+                        <div class="d-flex gap-3">
+                            <button class="btn btn-sm ${isLiked ? 'btn-primary' : 'btn-outline-primary'}" 
+                                    onclick="toggleLike(${post.id})">
+                                <i class="bi bi-hand-thumbs-up${isLiked ? '-fill' : ''}"></i> 
+                                Like ${post.likes.length}
+                            </button>
+                            <button class="btn btn-sm ${isDisliked ? 'btn-danger' : 'btn-outline-danger'}" 
+                                    onclick="toggleDislike(${post.id})">
+                                <i class="bi bi-hand-thumbs-down${isDisliked ? '-fill' : ''}"></i> 
+                                Dislike ${post.dislikes.length}
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function deletePost(postId) {
+            if (!confirm('Are you sure you want to delete this post?')) return;
+            
+            const postIndex = POSTS.findIndex(post => post.id === postId);
+            if (postIndex > -1) {
+                const post = POSTS[postIndex];
+                
+                // Only allow deleting own posts
+                if (post.userId !== currentUser) {
+                    alert('You can only delete your own posts!');
+                    return;
+                }
+                
+                POSTS.splice(postIndex, 1);
+                renderNewsFeed();
+                updateProfile();
+                alert('Post deleted successfully!');
+            }
+        }
+
+        function rateFriend(friendId, rating) {
+            USERS[currentUser].friendRatings[friendId] = rating;
+            updateProfile();
+        }
+
+        function unfriendUser(friendId) {
+            if (!confirm('Are you sure you want to unfriend this user?')) return;
+            
+            const user = USERS[currentUser];
+            const friend = USERS[friendId];
+            
+            // Remove from both friends lists
+            user.friends = user.friends.filter(id => id !== friendId);
+            friend.friends = friend.friends.filter(id => id !== currentUser);
+            
+            // Remove ratings
+            delete user.friendRatings[friendId];
+            delete friend.friendRatings[currentUser];
+            
+            updateProfile();
+            alert('User unfriended successfully');
+        }
+
+        function unignoreUser(ignoredId) {
+            const user = USERS[currentUser];
+            user.ignoredUsers = user.ignoredUsers.filter(id => id !== ignoredId);
+            updateProfile();
+            alert('User unignored successfully');
+        }
+
+        function renderFriendsOnline() {
+            const user = USERS[currentUser];
+            const friendsOnlineDiv = document.getElementById('friendsOnline');
+            
+            // Filter friends who have logged in (lastLogin is not null)
+            const loggedInFriends = user.friends.filter(friendId => USERS[friendId].lastLogin !== null);
+            
+            // Sort by most recent login
+            const sortedFriends = loggedInFriends.sort((a, b) => {
+                return USERS[b].lastLogin - USERS[a].lastLogin;
+            });
+
+            friendsOnlineDiv.innerHTML = '';
+            
+            if (sortedFriends.length === 0) {
+                friendsOnlineDiv.innerHTML = '<p class="text-muted text-center">No friends online yet</p>';
+                return;
+            }
+            
+            sortedFriends.forEach(friendId => {
+                const friend = USERS[friendId];
+                const timeAgo = getTimeAgo(friend.lastLogin);
+                
+                friendsOnlineDiv.innerHTML += `
+                    <div class="friend-item d-flex align-items-center">
+                        <img src="${friend.profilePic}" class="profile-pic me-2" alt="${friend.name}">
+                        <div>
+                            <h6 class="mb-0">${friend.name}</h6>
+                            <small class="time-ago">Last seen: ${timeAgo}</small>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        document.getElementById('shareWith').addEventListener('change', function() {
+            const selector = document.getElementById('friendSelector');
+            const checkboxes = document.getElementById('friendCheckboxes');
+            
+            if (this.value === 'select') {
+                selector.classList.remove('hide');
+                checkboxes.innerHTML = '';
+                
+                USERS[currentUser].friends.forEach(friendId => {
+                    const friend = USERS[friendId];
+                    checkboxes.innerHTML += `
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="${friendId}" id="friend_${friendId}">
+                            <label class="form-check-label" for="friend_${friendId}">
+                                ${friend.name}
+                            </label>
+                        </div>
+                    `;
+                });
+            } else {
+                selector.classList.add('hide');
+            }
+        });
+
+        function createPost() {
+            const content = document.getElementById('postContent').value;
+            if (!content.trim()) return;
+
+            const imageUrl = document.getElementById('postImage').value;
+            const shareWith = document.getElementById('shareWith').value;
+            let sharedWith = 'all';
+            
+            if (shareWith === 'select') {
+                const selected = [];
+                document.querySelectorAll('#friendCheckboxes input:checked').forEach(cb => {
+                    selected.push(cb.value);
+                });
+                sharedWith = selected;
+            }
+
+            const newPost = {
+                id: POSTS.length + 1,
+                userId: currentUser,
+                content: content,
+                imageUrl: imageUrl.trim(),
+                timestamp: new Date(),
+                likes: [],
+                dislikes: [],
+                sharedWith: sharedWith
+            };
+
+            POSTS.unshift(newPost);
+            document.getElementById('postContent').value = '';
+            document.getElementById('postImage').value = '';
+            document.getElementById('shareWith').value = 'all';
+            document.getElementById('friendSelector').classList.add('hide');
+            
+            renderNewsFeed();
+        }
+
+        function renderNewsFeed() {
+            const newsFeedDiv = document.getElementById('newsFeed');
+            const user = USERS[currentUser];
+            
+            const visiblePosts = POSTS.filter(post => {
+                if (post.userId === currentUser) return true;
+                if (!user.friends.includes(post.userId)) return false;
+                
+                if (post.sharedWith === 'all') return true;
+                if (Array.isArray(post.sharedWith) && post.sharedWith.includes(currentUser)) return true;
+                
+                return false;
+            });
+
+            newsFeedDiv.innerHTML = '';
+            visiblePosts.forEach(post => {
+                const author = USERS[post.userId];
+                const timeAgo = getTimeAgo(post.timestamp);
+                const isLiked = post.likes.includes(currentUser);
+                const isDisliked = post.dislikes.includes(currentUser);
+                const isOwnPost = post.userId === currentUser;
+
+                newsFeedDiv.innerHTML += `
+                    <div class="post-card p-3">
+                        <div class="post-header-container">
+                            ${isOwnPost ? `<button class="delete-post-btn" onclick="deletePost(${post.id})" title="Delete Post"><i class="bi bi-trash-fill"></i></button>` : ''}
+                            <div class="d-flex align-items-center mb-3">
+                                <img src="${author.profilePic}" class="profile-pic me-2" alt="${author.name}">
+                                <div>
+                                    <h6 class="mb-0">${author.name}</h6>
+                                    <small class="time-ago">${timeAgo}</small>
+                                </div>
+                            </div>
+                        </div>
+                        <p>${post.content}</p>
+                        ${post.imageUrl ? `<img src="${post.imageUrl}" class="post-image" alt="Post image">` : ''}
+                        <div class="d-flex gap-3">
+                            <button class="btn btn-sm ${isLiked ? 'btn-primary' : 'btn-outline-primary'}" 
+                                    onclick="toggleLike(${post.id})">
+                                <i class="bi bi-hand-thumbs-up${isLiked ? '-fill' : ''}"></i> 
+                                Like ${post.likes.length}
+                            </button>
+                            <button class="btn btn-sm ${isDisliked ? 'btn-danger' : 'btn-outline-danger'}" 
+                                    onclick="toggleDislike(${post.id})">
+                                <i class="bi bi-hand-thumbs-down${isDisliked ? '-fill' : ''}"></i> 
+                                Dislike ${post.dislikes.length}
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function toggleLike(postId) {
+            const post = POSTS.find(p => p.id === postId);
+            const index = post.likes.indexOf(currentUser);
+            
+            if (index > -1) {
+                post.likes.splice(index, 1);
+            } else {
+                post.likes.push(currentUser);
+                const dislikeIndex = post.dislikes.indexOf(currentUser);
+                if (dislikeIndex > -1) {
+                    post.dislikes.splice(dislikeIndex, 1);
+                }
+            }
+            renderNewsFeed();
+            renderUserPosts();
+        }
+
+        function toggleDislike(postId) {
+            const post = POSTS.find(p => p.id === postId);
+            const index = post.dislikes.indexOf(currentUser);
+            
+            if (index > -1) {
+                post.dislikes.splice(index, 1);
+            } else {
+                post.dislikes.push(currentUser);
+                const likeIndex = post.likes.indexOf(currentUser);
+                if (likeIndex > -1) {
+                    post.likes.splice(likeIndex, 1);
+                }
+            }
+            renderNewsFeed();
+            renderUserPosts();
+        }
+
+        function renderAllUsers() {
+            const allUsersDiv = document.getElementById('allUsersList');
+            const user = USERS[currentUser];
+            
+            allUsersDiv.innerHTML = '';
+            Object.keys(USERS).forEach(userId => {
+                if (userId === currentUser) return;
+                
+                const otherUser = USERS[userId];
+                const isFriend = user.friends.includes(userId);
+                const isIgnored = otherUser.ignoredUsers.includes(currentUser);
+                const hasPendingRequest = FRIEND_REQUESTS.some(
+                    req => req.from === currentUser && req.to === userId && req.status === 'pending'
+                );
+
+                let actionButton = '';
+                if (isFriend) {
+                    actionButton = '<span class="badge bg-success">Friend</span>';
+                } else if (isIgnored) {
+                    actionButton = '<span class="badge bg-danger">Cannot send request (Ignored)</span>';
+                } else if (hasPendingRequest) {
+                    actionButton = '<span class="badge bg-warning">Request Pending</span>';
+                } else {
+                    actionButton = `
+                        <button class="btn btn-sm btn-primary" onclick="sendFriendRequest('${userId}')">
+                            <i class="bi bi-person-plus"></i> Add Friend
+                        </button>
+                        <button class="btn btn-sm btn-outline-danger ms-1" onclick="ignoreUser('${userId}')" title="Ignore this user">
+                            <i class="bi bi-person-x"></i>
+                        </button>
+                    `;
+                }
+
+                allUsersDiv.innerHTML += `
+                    <div class="friend-item d-flex align-items-center">
+                        <img src="${otherUser.profilePic}" class="profile-pic me-3" alt="${otherUser.name}">
+                        <div class="flex-grow-1">
+                            <h6 class="mb-0">${otherUser.name}</h6>
+                            <small class="text-muted">${otherUser.bio}</small>
+                        </div>
+                        <div>
+                            ${actionButton}
+                            <button class="btn btn-sm btn-outline-primary ms-2" onclick="startConversation('${userId}')">
+                                <i class="bi bi-chat"></i> Message
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function sendFriendRequest(toUserId) {
+            const toUser = USERS[toUserId];
+            
+            if (toUser.ignoredUsers.includes(currentUser)) {
+                alert('Cannot send friend request. You have been ignored by this user.');
+                return;
+            }
+
+            // Check if request already exists
+            const existingRequest = FRIEND_REQUESTS.find(
+                req => req.from === currentUser && req.to === toUserId && req.status === 'pending'
+            );
+            
+            if (existingRequest) {
+                alert('Friend request already sent!');
+                return;
+            }
+
+            FRIEND_REQUESTS.push({
+                from: currentUser,
+                to: toUserId,
+                status: 'pending',
+                timestamp: new Date()
+            });
+
+            alert('Friend request sent successfully!');
+            renderAllUsers();
+            updateRequestBadge();
+        }
+
+        function ignoreUser(userId) {
+            if (!confirm('Are you sure you want to ignore this user? They will not be able to send you friend requests.')) return;
+            
+            const user = USERS[currentUser];
+            if (!user.ignoredUsers.includes(userId)) {
+                user.ignoredUsers.push(userId);
+                alert('User ignored successfully');
+                renderAllUsers();
+            }
+        }
+
+        function renderFriendRequests() {
+            const pendingRequestsDiv = document.getElementById('pendingRequests');
+            
+            // Get all pending requests for current user
+            const incomingRequests = FRIEND_REQUESTS.filter(
+                req => req.to === currentUser && req.status === 'pending'
+            );
+
+            if (incomingRequests.length === 0) {
+                pendingRequestsDiv.innerHTML = '<p class="text-muted text-center">No pending friend requests</p>';
+                return;
+            }
+
+            pendingRequestsDiv.innerHTML = '';
+            incomingRequests.forEach(request => {
+                const fromUser = USERS[request.from];
+                const timeAgo = getTimeAgo(request.timestamp);
+                
+                pendingRequestsDiv.innerHTML += `
+                    <div class="friend-item d-flex align-items-center mb-3">
+                        <img src="${fromUser.profilePic}" class="profile-pic me-3" alt="${fromUser.name}">
+                        <div class="flex-grow-1">
+                            <h6 class="mb-0">${fromUser.name}</h6>
+                            <small class="text-muted">${fromUser.bio}</small>
+                            <br>
+                            <small class="time-ago">${timeAgo}</small>
+                        </div>
+                        <div>
+                            <button class="btn btn-success btn-sm me-2" onclick="acceptFriendRequest('${request.from}')">
+                                <i class="bi bi-check-circle"></i> Accept
+                            </button>
+                            <button class="btn btn-danger btn-sm" onclick="declineFriendRequest('${request.from}')">
+                                <i class="bi bi-x-circle"></i> Decline
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function acceptFriendRequest(fromUserId) {
+            // Find the request
+            const request = FRIEND_REQUESTS.find(
+                req => req.from === fromUserId && req.to === currentUser && req.status === 'pending'
+            );
+            
+            if (!request) return;
+
+            // Update request status
+            request.status = 'accepted';
+
+            // Add to friends list for both users
+            USERS[currentUser].friends.push(fromUserId);
+            USERS[fromUserId].friends.push(currentUser);
+
+            alert('Friend request accepted!');
+            renderFriendRequests();
+            updateRequestBadge();
+        }
+
+        function declineFriendRequest(fromUserId) {
+            // Find the request
+            const request = FRIEND_REQUESTS.find(
+                req => req.from === fromUserId && req.to === currentUser && req.status === 'pending'
+            );
+            
+            if (!request) return;
+
+            // Update request status
+            request.status = 'declined';
+
+            alert('Friend request declined');
+            renderFriendRequests();
+            updateRequestBadge();
+        }
+
+        function updateRequestBadge() {
+            const badge = document.getElementById('requestBadge');
+            const pendingCount = FRIEND_REQUESTS.filter(
+                req => req.to === currentUser && req.status === 'pending'
+            ).length;
+
+            if (pendingCount > 0) {
+                badge.textContent = pendingCount;
+                badge.classList.remove('hide');
+            } else {
+                badge.classList.add('hide');
+            }
+        }
+
+        function renderConversations() {
+            const conversationsDiv = document.getElementById('conversationsList');
+            const user = USERS[currentUser];
+            
+            conversationsDiv.innerHTML = '';
+            
+            const allUsers = Object.keys(USERS).filter(id => id !== currentUser);
+            
+            allUsers.forEach(userId => {
+                const otherUser = USERS[userId];
+                conversationsDiv.innerHTML += `
+                    <div class="friend-item" style="cursor: pointer;" onclick="selectConversation('${userId}')">
+                        <div class="d-flex align-items-center">
+                            <img src="${otherUser.profilePic}" class="profile-pic me-2" alt="${otherUser.name}">
+                            <div>
+                                <h6 class="mb-0">${otherUser.name}</h6>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function selectConversation(userId) {
+            selectedConversation = userId;
+            renderMessages();
+        }
+
+        function renderMessages() {
+            if (!selectedConversation) return;
+
+            const messageArea = document.getElementById('messageArea');
+            const otherUser = USERS[selectedConversation];
+            
+            const conversationKey = [currentUser, selectedConversation].sort().join('_');
+            const messages = MESSAGES[conversationKey] || [];
+
+            messageArea.innerHTML = `
+                <div class="d-flex align-items-center mb-3 pb-3 border-bottom">
+                    <img src="${otherUser.profilePic}" class="profile-pic me-2" alt="${otherUser.name}">
+                    <h6 class="mb-0">${otherUser.name}</h6>
+                </div>
+            
+                    ${messages.map(msg => `
+                        <div class="d-flex ${msg.from === currentUser ? 'justify-content-end' : ''}">
+                            <div class="message-bubble ${msg.from === currentUser ? 'message-sent' : 'message-received'}">
+                                ${msg.content}
+                                <div style="font-size: 0.75rem; opacity: 0.8; margin-top: 5px;">
+                                    ${new Date(msg.timestamp).toLocaleTimeString()}
+                                </div>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+                <div class="input-group">
+                    <input type="text" class="form-control" id="messageInput" placeholder="Type a message...">
+                    <button class="btn btn-primary" onclick="sendMessage()">
+                        <i class="bi bi-send-fill"></i> Send
+                    </button>
+                </div>
+            `;
+
+            document.getElementById('messageInput').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    sendMessage();
+                }
+            });
+        }
+
+        function startConversation(userId) {
+            selectedConversation = userId;
+            showTab('messages');
+            setTimeout(() => {
+                renderMessages();
+            }, 100);
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('messageInput');
+            const content = input.value.trim();
+            
+            if (!content || !selectedConversation) return;
+
+            const conversationKey = [currentUser, selectedConversation].sort().join('_');
+            
+            if (!MESSAGES[conversationKey]) {
+                MESSAGES[conversationKey] = [];
+            }
+
+            MESSAGES[conversationKey].push({
+                from: currentUser,
+                to: selectedConversation,
+                content: content,
+                timestamp: new Date()
+            });
+
+            input.value = '';
+            renderMessages();
+        }
+
+        function getTimeAgo(date) {
+            const seconds = Math.floor((new Date() - date) / 1000);
+            
+            let interval = seconds / 31536000;
+            if (interval > 1) return Math.floor(interval) + " years ago";
+            
+            interval = seconds / 2592000;
+            if (interval > 1) return Math.floor(interval) + " months ago";
+            
+            interval = seconds / 86400;
+            if (interval > 1) return Math.floor(interval) + " days ago";
+            
+            interval = seconds / 3600;
+            if (interval > 1) return Math.floor(interval) + " hours ago";
+            
+            interval = seconds / 60;
+            if (interval > 1) return Math.floor(interval) + " minutes ago";
+            
+            return Math.floor(seconds) + " seconds ago";
+        }
+    </script>
+</body>
+</html>
